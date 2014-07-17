@@ -1,0 +1,27 @@
+body {
+  padding-top: 70px;
+}
+
+.container {
+  padding-top: 15px;
+}
+
+.img-main {
+  max-height: 90%;
+}
+
+.buttons-main {
+  height: 10%;
+  margin: 0;
+  padding: 15px 0px;
+}
+
+#main-video {
+    margin-bottom: 20px;
+    width: 640px;
+    height: 480px;
+}
+
+#main-video video {
+    border-radius: 20px;
+}
