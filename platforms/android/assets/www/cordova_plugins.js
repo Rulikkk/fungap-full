@@ -195,15 +195,5 @@ module.exports = [
         ],
         "runs": true
     }
-];
-module.exports.metadata = 
-// TOP OF METADATA
-{
-    "org.apache.cordova.camera": "0.3.0",
-    "org.apache.cordova.inappbrowser": "0.3.0",
-    "org.apache.cordova.console": "0.2.9",
-    "org.apache.cordova.file-transfer": "0.4.4",
-    "org.apache.cordova.file": "1.2.0"
-}
-// BOTTOM OF METADATA
+]
 });

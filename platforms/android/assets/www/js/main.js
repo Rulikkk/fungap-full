@@ -1,4 +1,4 @@
-/*global Webcam, VK, alert, console, $ */
+/*global Webcam, VK, alert, console, $, FileUploadOptions, FileTransfer */
 var sg = {
   vk: {
     apiId: 4383863,
@@ -7,6 +7,8 @@ var sg = {
   },
   
   captureButton: $('#capture-button'),
+  
+  captureFile: true,
   
   main: function () {
     'use strict';
@@ -30,10 +32,11 @@ var sg = {
   
   uploadToVk: function (img) {
     'use strict';
-    var me = this;
+    var me = this,
+      uploader = this.captureFile ? this.uploadFile : Webcam.upload;
     this.vkApi('photos.getWallUploadServer', {}, function (r1) {
       
-      Webcam.upload(img, r1.response.upload_url, function (code, text) {
+      uploader(img, r1.response.upload_url, function (code, text) {
         console.log(code);
         console.log(text);
         var photo = JSON.parse(text);
@@ -103,6 +106,35 @@ var sg = {
     return true;
   },
   
+  uploadFile: function (path, url, cb) {
+    'use strict';
+    cb = cb || function () {};
+    
+    function win(r) {
+      console.log("File upload Code = " + r.responseCode);
+      console.log("File upload Response = " + r.response);
+      console.log("File upload Sent = " + r.bytesSent);
+      cb(r.responseCode, r.response);
+    }
+
+    function fail(error) {
+      alert("An error has occurred: Code = " + error.code);
+      console.log("upload error source " + error.source);
+      console.log("upload error target " + error.target);
+    }
+
+    var options = new FileUploadOptions(),
+      ft = new FileTransfer();
+    
+    options.fileKey = 'photo';
+    options.fileName = 'photo.jpg';
+    options.mimeType = 'image/jpg';
+    
+    path = path.replace('emulated/0', 'emulated/legacy');
+
+    ft.upload(path, url, win, fail, options);
+  },
+  
   capture: function () {
     'use strict';
     
@@ -110,16 +142,16 @@ var sg = {
     
     function success(data) {
       var image = document.getElementById('main-media'),
-        src = "data:image/jpeg;base64," + data;
+        src = me.captureFile ? data : "data:image/jpeg;base64," + data;
       image.src = src;
       me.uploadToVk(src);
     }
 
-    function fail(err) { alert(err); }
+    function fail(err) { console.log(err); }
     
     if (navigator.camera) {
       navigator.camera.getPicture(success, fail, {
-        destinationType: navigator.camera.DestinationType.DATA_URL,
+        destinationType: this.captureFile ? navigator.camera.DestinationType.FILE_URI : navigator.camera.DestinationType.DATA_URL,
         quality: 40,
         sourceType: navigator.camera.PictureSourceType.CAMERA,
         mediaType: navigator.camera.MediaType.PICTURE,
