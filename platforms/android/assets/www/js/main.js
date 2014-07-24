@@ -48,7 +48,7 @@ var sg = {
         }, function (r2) {
           console.log(JSON.stringify(r2));
           me.vkApi('wall.post', {
-            owner_id: -me.vk.group,
+            owner_id: me.vk.userId, // -me.vk.group,
             attachments: 'photo' + r2.response[0].owner_id + '_' + r2.response[0].id,
             access_token: me.vk.token
           }, function (r3) {
