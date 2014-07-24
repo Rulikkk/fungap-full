@@ -129,8 +129,7 @@ var sg = {
     options.fileKey = 'photo';
     options.fileName = 'photo.jpg';
     options.mimeType = 'image/jpg';
-    
-    path = path.replace('emulated/0', 'emulated/legacy');
+    options.chunkedMode = false;
 
     ft.upload(path, url, win, fail, options);
   },
