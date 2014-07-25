@@ -50,6 +50,7 @@ var sg = {
           me.vkApi('wall.post', {
             owner_id: me.vk.userId, // -me.vk.group,
             attachments: 'photo' + r2.response[0].owner_id + '_' + r2.response[0].id,
+            message: '#samograph' + ' ' + me.vk.name,
             access_token: me.vk.token
           }, function (r3) {
             console.log(JSON.stringify(r3));
@@ -93,9 +94,10 @@ var sg = {
             fields: 'screen_name'
           }, function (res) {
             res = res.response[0];
-            $('span#vk-name').text(res.screen_name.indexOf('id') === 0 ?
+            me.vk.name = res.screen_name.indexOf('id') === 0 ?
                                res.first_name + ' ' + res.last_name :
-                               res.screen_name);
+                               res.screen_name;
+            $('span#vk-name').text(me.vk.name);
             setTimeout(function () { me.capture(); }, 0);
           });
         }
